@@ -43,10 +43,12 @@ export function AuthorPublisher() {
         <p className="section__label">Publisher</p>
         <h2 className="publisher__name">{publisher.displayName}</h2>
         <p className="publisher__tagline">{publisher.tagline}</p>
+        <p className="publisher__mission">{publisher.mission}</p>
         <ul className="publisher__facts">
-          <li>Independent publishing · {publisher.country}</li>
-          <li>Maker: Anish Writings</li>
-          <li>Available on Flipkart</li>
+          <li>{publisher.origin}</li>
+          <li>Maker: Anish Writings · {publisher.country}</li>
+          <li>Seller on Flipkart: {book.seller}</li>
+          <li>{book.deliveryNote}</li>
         </ul>
         <motion.a
           href="https://anishwritings.com"

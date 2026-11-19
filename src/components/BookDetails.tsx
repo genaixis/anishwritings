@@ -56,7 +56,7 @@ export function BookDetails({ onBuy }: { onBuy: () => void }) {
           transition={{ duration: 0.8 }}
         >
           <div className="book-card__shine" aria-hidden="true" />
-          <img src={book.coverUrl} alt="" loading="lazy" />
+          <img src={book.coverLocal} alt="" loading="lazy" />
           <motion.div
             className="price-tag"
             animate={{ scale: [1, 1.03, 1] }}

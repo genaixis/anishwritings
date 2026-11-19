@@ -6,12 +6,14 @@ import {
   useTransform,
 } from 'framer-motion'
 import { book, publisher } from '../data/book'
+import { useCoarsePointer } from '../hooks/useCoarsePointer'
 
 type HeroProps = {
   onBuy: () => void
 }
 
 export function Hero({ onBuy }: HeroProps) {
+  const coarse = useCoarsePointer()
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
   const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [12, -12]), {
@@ -24,6 +26,7 @@ export function Hero({ onBuy }: HeroProps) {
   })
 
   const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (coarse) return
     const rect = e.currentTarget.getBoundingClientRect()
     mx.set((e.clientX - rect.left) / rect.width - 0.5)
     my.set((e.clientY - rect.top) / rect.height - 0.5)
@@ -153,20 +156,20 @@ export function Hero({ onBuy }: HeroProps) {
         >
           <motion.div
             className="hero__book-shadow"
-            style={{ rotateX, rotateY }}
+            style={coarse ? undefined : { rotateX, rotateY }}
             animate={{ y: [0, -10, 0] }}
             transition={{ y: { duration: 5, repeat: Infinity, ease: 'easeInOut' } }}
           />
           <motion.figure
             className="hero__book"
-            style={{ rotateX, rotateY, transformPerspective: 1200 }}
-            initial={{ opacity: 0, scale: 0.88, rotateY: -18 }}
+            style={coarse ? undefined : { rotateX, rotateY, transformPerspective: 1200 }}
+            initial={{ opacity: 0, scale: coarse ? 1 : 0.88, rotateY: coarse ? 0 : -18 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ duration: 1.1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="hero__book-spine" aria-hidden="true" />
             <img
-              src={book.coverUrl}
+              src={book.coverLocal}
               alt={`Cover of ${book.titleLatin}, hardcover Telugu novel`}
               width={416}
               height={562}

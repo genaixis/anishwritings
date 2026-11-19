@@ -1,4 +1,5 @@
 import { motion, useMotionTemplate, useScroll, useTransform } from 'framer-motion'
+import { useState } from 'react'
 import { navLinks, publisher } from '../data/book'
 
 type HeaderProps = {
@@ -10,6 +11,9 @@ export function Header({ onBuy }: HeaderProps) {
   const backdrop = useTransform(scrollY, [0, 80], [0, 1])
   const borderOpacity = useTransform(scrollY, [0, 80], [0, 0.4])
   const borderColor = useMotionTemplate`rgba(245, 239, 230, ${borderOpacity})`
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const closeMenu = () => setMenuOpen(false)
 
   return (
     <motion.header className="site-header">
@@ -23,15 +27,27 @@ export function Header({ onBuy }: HeaderProps) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <a href="#" className="logo">
+        <a href="#" className="logo" onClick={closeMenu}>
           <span className="logo__mark" aria-hidden="true" />
           <span className="logo__text">{publisher.displayName}</span>
         </a>
+
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-nav"
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          {menuOpen ? 'Close' : 'Menu'}
+        </button>
+
         <nav className="nav" aria-label="Primary">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.href}
               href={link.href}
+              onClick={closeMenu}
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.25 + i * 0.06 }}
@@ -40,10 +56,27 @@ export function Header({ onBuy }: HeaderProps) {
             </motion.a>
           ))}
         </nav>
+
+        <nav
+          id="mobile-nav"
+          className={`nav-mobile${menuOpen ? ' nav-mobile--open' : ''}`}
+          aria-label="Mobile"
+          aria-hidden={!menuOpen}
+        >
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} onClick={closeMenu}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+
         <motion.button
           type="button"
           className="btn btn--header"
-          onClick={onBuy}
+          onClick={() => {
+            closeMenu()
+            onBuy()
+          }}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
           initial={{ opacity: 0 }}

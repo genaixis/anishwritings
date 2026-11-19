@@ -3,8 +3,11 @@ import { useRef } from 'react'
 import { book } from '../data/book'
 
 const lines = [
+  book.synopsis,
   'A Telugu love story rooted in home, honour, and the quiet courage of everyday life.',
   'Janaki Chenthaku Ram explores how deep affection does not escape responsibility—it illuminates the path through it.',
+  'The hardcover first edition from anishwritings is crafted for collectors and first-time readers alike—ISBN ' +
+    book.isbn + ', sold via Flipkart with COD and 7-day replacement.',
   'Written for readers who believe romance and family duty can walk the same road, hand in hand.',
 ]
 
